@@ -11,14 +11,15 @@ import javax.persistence.ManyToMany;
 import lombok.Data;
 
 @Data
-@Entity
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-    @Column(name = "role_name", unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
     private String password;
     @ManyToMany
