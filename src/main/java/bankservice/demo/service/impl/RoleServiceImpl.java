@@ -22,9 +22,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getByName(String name) {
-        return roleRepository.getRoleByRoleName(name)
+    public Role getByName(Role.RoleName roleName) {
+        return roleRepository.getByRoleName(roleName)
                 .orElseThrow(() ->
-                        new DataProcessingException("Can't find role by this name: " + name));
+                        new DataProcessingException("Can't find role by this name: " + roleName));
     }
 }

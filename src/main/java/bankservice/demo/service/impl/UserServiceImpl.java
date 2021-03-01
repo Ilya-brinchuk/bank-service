@@ -17,18 +17,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User update(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 
     @Override
     public User get(Long id) {
-        return userRepository.findByIdFetchRoles(id)
+        return userRepository.findById(id)
                 .orElseThrow(() ->
                         new DataProcessingException("Can't find user by this id: " + id));
     }
@@ -39,8 +34,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByPhoneNumber(String phoneNumber) {
-        return userRepository.findUserByPhoneNumber(phoneNumber)
+    public User getByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new DataProcessingException(
                         "Can't find user by this phone number: " + phoneNumber)
                 );

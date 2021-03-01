@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataInitializer {
-    private RoleService roleService;
-    private UserService userService;
+    private final RoleService roleService;
+    private final UserService userService;
 
     @Autowired
     public DataInitializer(RoleService roleService,
@@ -36,6 +36,6 @@ public class DataInitializer {
         userAdmin.setPhoneNumber("380931112244");
         userAdmin.setDateOfBirth(LocalDate.of(1993, 8, 6));
         userAdmin.setRoles(Set.of(roleAdmin));
-        userService.create(userAdmin);
+        userService.save(userAdmin);
     }
 }
