@@ -30,6 +30,7 @@ public class DataInitializer {
         roleAdmin.setRoleName(Role.RoleName.ADMIN);
         roleService.save(roleUser);
         roleService.save(roleAdmin);
+        System.out.println(roleService.getByName("ADMIN"));
         User userAdmin = new User();
         userAdmin.setName("Bob");
         userAdmin.setPassword("2323");
