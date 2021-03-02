@@ -2,20 +2,11 @@ package bankservice.demo.service.impl;
 
 import bankservice.demo.exception.DataProcessingException;
 import bankservice.demo.model.Account;
-import bankservice.demo.model.Currency;
 import bankservice.demo.model.Transaction;
 import bankservice.demo.model.dto.TransactionRequestDto;
 import bankservice.demo.repository.TransactionRepository;
 import bankservice.demo.service.AccountService;
 import bankservice.demo.service.TransactionService;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +53,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         accountFrom.setBalance(accountFrom.getBalance() - transactionRequestDto.getAmount());
         transactionFrom.setAmount(transactionRequestDto.getAmount());
-        if (!accountFrom.getCurrency().equals(accountTo.getCurrency())) {
-            double convertedAmount = convertCurrency(transactionRequestDto.getAmount(),
-                    accountFrom.getCurrency(),
-                    accountTo.getCurrency());
-            transactionRequestDto.setAmount(convertedAmount);
-        }
+
         transactionTo.setAmount(transactionRequestDto.getAmount());
         accountTo.setBalance(accountTo.getBalance() + transactionRequestDto.getAmount());
         LocalDateTime timeOfTransfer = LocalDateTime.now();
@@ -84,22 +70,5 @@ public class TransactionServiceImpl implements TransactionService {
         Sort sort = Sort.by("dateTime").ascending();
         PageRequest pageable = PageRequest.of(page, size, sort);
         return transactionRepository.getAllTransactionByAccount(account, pageable);
-    }
-
-    private double convertCurrency(double amount, Currency currencyFrom, Currency currencyTo) {
-        String path = "https://api.exchangerate.host/convert?from=" + currencyFrom.toString()
-                + "&to=" + currencyTo.toString() + "&amount=" + amount;
-        try {
-            URL url = new URL(path);
-            HttpURLConnection request = (HttpURLConnection) url.openConnection();
-            request.connect();
-
-            JsonElement root = JsonParser
-                    .parseReader(new InputStreamReader((InputStream) request.getContent()));
-            JsonObject jsonObject = root.getAsJsonObject();
-            return jsonObject.get("result").getAsDouble();
-        } catch (IOException e) {
-            throw new DataProcessingException("Can't get connection to the external API", e);
-        }
     }
 }
