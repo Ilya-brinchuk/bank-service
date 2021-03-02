@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("From Transaction t where t.accountFrom = :account or t.accountTo = :account")
+    @Query("From transactions t where t.accountFrom = :account or t.accountTo = :account")
     List<Transaction> getAllTransactionByAccount(@Param("account") Account account,
                                                  Pageable pageable);
 

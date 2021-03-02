@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Data;
 
-@Entity
+@Entity(name = "transactions")
 @Data
 public class Transaction {
     @Id
