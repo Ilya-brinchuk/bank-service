@@ -25,7 +25,7 @@ public class Account {
     private Currency currency;
     @Min(0)
     private BigDecimal balance;
-    @Column(name = "is_active", columnDefinition = "boolean default true")
+    @Column(name = "is_active", columnDefinition = "boolean default true", nullable = false)
     private boolean isActive;
     @ManyToOne
     @ToString.Exclude

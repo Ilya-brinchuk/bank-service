@@ -15,7 +15,7 @@ public class UserMapper implements MapperToEntity<User, UserRequestDto>,
         User user = new User();
         user.setName(requestDto.getName());
         user.setPhoneNumber(requestDto.getPhoneNumber());
-        user.setDateOfBirth(requestDto.getBirthday());
+        user.setDateOfBirth(requestDto.getDateOfBirth());
         user.setPassword(requestDto.getPassword());
         return user;
     }

@@ -7,6 +7,6 @@ import lombok.Data;
 public class UserRequestDto {
     private String name;
     private String phoneNumber;
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
     private String password;
 }

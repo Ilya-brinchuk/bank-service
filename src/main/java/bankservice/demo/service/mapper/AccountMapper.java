@@ -22,8 +22,8 @@ public class AccountMapper implements MapperToEntity<Account, AccountRequestDto>
     public AccountResponseDto mapToDto(Account account) {
         AccountResponseDto responseDto = new AccountResponseDto();
         responseDto.setAccountNumber(account.getAccountNumber());
-        responseDto.setBalance(responseDto.getBalance());
-        responseDto.setCurrency(responseDto.getCurrency());
+        responseDto.setBalance(account.getBalance());
+        responseDto.setCurrency(account.getCurrency().toString());
         return responseDto;
     }
 
@@ -33,6 +33,7 @@ public class AccountMapper implements MapperToEntity<Account, AccountRequestDto>
         account.setAccountNumber(requestDto.getAccountNumber());
         account.setCurrency(Currency.valueOf(requestDto.getCurrency()));
         account.setUser(userService.get(requestDto.getUserId()));
+        account.setBalance(requestDto.getBalance());
         return account;
     }
 }
