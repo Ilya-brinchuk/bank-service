@@ -9,6 +9,7 @@ import bankservice.demo.service.AccountService;
 import bankservice.demo.service.RoleService;
 import bankservice.demo.service.TransactionService;
 import bankservice.demo.service.UserService;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.annotation.PostConstruct;
@@ -49,7 +50,7 @@ public class DataInitializer {
         userAdmin.setRoles(Set.of(roleAdmin));
         userService.save(userAdmin);
         Account accountAdmin = new Account();
-        accountAdmin.setBalance(5000);
+        accountAdmin.setBalance(BigDecimal.valueOf(5000));
         accountAdmin.setActive(true);
         accountAdmin.setAccountNumber("111");
         accountAdmin.setUser(userAdmin);
@@ -57,14 +58,14 @@ public class DataInitializer {
         accountService.save(accountAdmin);
 
         Account accountUser = new Account();
-        accountUser.setBalance(300);
+        accountUser.setBalance(BigDecimal.valueOf(300));
         accountUser.setActive(true);
         accountUser.setAccountNumber("222");
         accountUser.setUser(userAdmin);
         accountUser.setCurrency(Currency.USD);
         accountService.save(accountUser);
         TransactionRequestDto requestDto = new TransactionRequestDto();
-        requestDto.setAmount(52.5);
+        requestDto.setAmount(BigDecimal.valueOf(52.5));
         requestDto.setAccountFromNumber("222");
         requestDto.setAccountToNumber("111");
         transactionService.transfer(requestDto);

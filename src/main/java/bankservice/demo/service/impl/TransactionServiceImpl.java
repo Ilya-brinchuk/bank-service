@@ -6,8 +6,8 @@ import bankservice.demo.model.Transaction;
 import bankservice.demo.model.dto.TransactionRequestDto;
 import bankservice.demo.repository.TransactionRepository;
 import bankservice.demo.service.AccountService;
-import bankservice.demo.service.HttpClientService;
 import bankservice.demo.service.TransactionService;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
-    private final HttpClientService httpClientService;
+    private final CurrencyConverter currencyConverter;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   AccountService accountService,
-                                  HttpClientService httpClientService) {
+                                  CurrencyConverter currencyConverter) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
-        this.httpClientService = httpClientService;
+        this.currencyConverter = currencyConverter;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
         Account accountTo =
                 accountService
                         .findAccountByAccountNumber(transactionRequestDto.getAccountToNumber());
-        if (accountFrom.getBalance() < transactionRequestDto.getAmount()) {
+        if (accountFrom.getBalance().compareTo(transactionRequestDto.getAmount()) < 0) {
             throw new DataProcessingException(
                     "There is not enough money in the account for this transfer. Balance: "
                             + accountFrom.getBalance());
@@ -57,16 +57,18 @@ public class TransactionServiceImpl implements TransactionService {
         transactionTo.setAccountTo(accountTo);
         transactionTo.setType(Transaction.Type.INCOMING);
 
-        accountFrom.setBalance(accountFrom.getBalance() - transactionRequestDto.getAmount());
+        accountFrom.setBalance(accountFrom.getBalance()
+                .subtract(transactionRequestDto.getAmount()));
         transactionFrom.setAmount(transactionRequestDto.getAmount());
         if (!accountFrom.getCurrency().equals(accountTo.getCurrency())) {
-            double convertedAmount = httpClientService.getRate(accountFrom.getCurrency(),
+            BigDecimal convertedAmount = currencyConverter.getRate(accountFrom.getCurrency(),
                     accountTo.getCurrency(),
                     timeOfTransfer.toLocalDate());
-            transactionRequestDto.setAmount(transactionRequestDto.getAmount() * convertedAmount);
+            transactionRequestDto.setAmount(transactionRequestDto.getAmount()
+                    .multiply(convertedAmount));
         }
         transactionTo.setAmount(transactionRequestDto.getAmount());
-        accountTo.setBalance(accountTo.getBalance() + transactionRequestDto.getAmount());
+        accountTo.setBalance(accountTo.getBalance().add(transactionRequestDto.getAmount()));
 
         transactionFrom.setDateTime(timeOfTransfer);
         transactionTo.setDateTime(timeOfTransfer);
