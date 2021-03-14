@@ -6,7 +6,6 @@ import bankservice.demo.model.Transaction;
 import bankservice.demo.model.dto.TransactionRequestDto;
 import bankservice.demo.repository.TransactionRepository;
 import bankservice.demo.service.AccountService;
-import bankservice.demo.service.HttpClientService;
 import bankservice.demo.service.TransactionService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,15 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
-    private final HttpClientService httpClientService;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  AccountService accountService,
-                                  HttpClientService httpClientService) {
+                                  AccountService accountService) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
-        this.httpClientService = httpClientService;
     }
 
     @Override
@@ -45,8 +41,6 @@ public class TransactionServiceImpl implements TransactionService {
                     "There is not enough money in the account for this transfer. Balance: "
                             + accountFrom.getBalance());
         }
-        LocalDateTime timeOfTransfer = LocalDateTime.now();
-
         Transaction transactionFrom = new Transaction();
         transactionFrom.setAccountFrom(accountFrom);
         transactionFrom.setAccountTo(accountTo);
@@ -59,15 +53,10 @@ public class TransactionServiceImpl implements TransactionService {
 
         accountFrom.setBalance(accountFrom.getBalance() - transactionRequestDto.getAmount());
         transactionFrom.setAmount(transactionRequestDto.getAmount());
-        if (!accountFrom.getCurrency().equals(accountTo.getCurrency())) {
-            double convertedAmount = httpClientService.getRate(accountFrom.getCurrency(),
-                    accountTo.getCurrency(),
-                    timeOfTransfer.toLocalDate());
-            transactionRequestDto.setAmount(transactionRequestDto.getAmount() * convertedAmount);
-        }
+
         transactionTo.setAmount(transactionRequestDto.getAmount());
         accountTo.setBalance(accountTo.getBalance() + transactionRequestDto.getAmount());
-
+        LocalDateTime timeOfTransfer = LocalDateTime.now();
         transactionFrom.setDateTime(timeOfTransfer);
         transactionTo.setDateTime(timeOfTransfer);
         transactionRepository.save(transactionFrom);

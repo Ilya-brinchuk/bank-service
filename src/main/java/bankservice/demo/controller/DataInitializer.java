@@ -68,5 +68,6 @@ public class DataInitializer {
         requestDto.setAccountFromNumber("222");
         requestDto.setAccountToNumber("111");
         transactionService.transfer(requestDto);
+        System.out.println(transactionService.getAllByAccount(0, 3, accountAdmin));
     }
 }
