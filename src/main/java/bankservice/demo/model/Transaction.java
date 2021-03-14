@@ -1,5 +1,6 @@
 package bankservice.demo.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -23,7 +24,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "account_to")
     private Account accountTo;
-    private double amount;
+    private BigDecimal amount;
     private LocalDateTime dateTime;
     @Enumerated(EnumType.STRING)
     private Type type;
