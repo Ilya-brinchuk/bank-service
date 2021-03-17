@@ -24,6 +24,8 @@ public class AccountMapper implements MapperToEntity<Account, AccountRequestDto>
         responseDto.setAccountNumber(account.getAccountNumber());
         responseDto.setBalance(account.getBalance());
         responseDto.setCurrency(account.getCurrency().toString());
+        responseDto.setAccountId(account.getId());
+        responseDto.setUserId(account.getUser().getId());
         return responseDto;
     }
 

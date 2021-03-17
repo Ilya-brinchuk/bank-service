@@ -52,7 +52,9 @@ public class UserController {
                        @RequestBody UserRequestDto requestDto) {
         User user = mapToEntity.mapToEntity(requestDto);
         user.setId(userId);
-        userService.update(user);
+        Role role = roleService.getByName("USER");
+        user.setRoles(Set.of(role));
+        userService.save(user);
     }
 
     @GetMapping("/{userId}")

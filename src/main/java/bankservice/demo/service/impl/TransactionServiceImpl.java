@@ -64,8 +64,9 @@ public class TransactionServiceImpl implements TransactionService {
             BigDecimal convertedAmount = currencyConverter.getRate(accountFrom.getCurrency(),
                     accountTo.getCurrency(),
                     timeOfTransfer.toLocalDate());
-            transactionRequestDto.setAmount(transactionRequestDto.getAmount()
-                    .multiply(convertedAmount));
+            BigDecimal transferAmount = transactionRequestDto.getAmount()
+                    .multiply(convertedAmount);
+            transactionRequestDto.setAmount(transferAmount);
         }
         transactionTo.setAmount(transactionRequestDto.getAmount());
         accountTo.setBalance(accountTo.getBalance().add(transactionRequestDto.getAmount()));

@@ -15,6 +15,7 @@ public class TransactionMapper implements MapperToDto<Transaction, TransactionRe
         responseDto.setAmount(transaction.getAmount());
         responseDto.setDateTime(transaction.getDateTime());
         responseDto.setType(transaction.getType().toString());
+        responseDto.setId(transaction.getId());
         return responseDto;
     }
 }

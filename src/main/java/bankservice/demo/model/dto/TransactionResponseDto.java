@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class TransactionResponseDto {
+    private Long id;
     private String accountNumberFrom;
     private String accountNumberTo;
     private BigDecimal amount;

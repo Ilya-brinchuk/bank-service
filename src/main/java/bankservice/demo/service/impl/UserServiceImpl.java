@@ -22,11 +22,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
     public User get(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->

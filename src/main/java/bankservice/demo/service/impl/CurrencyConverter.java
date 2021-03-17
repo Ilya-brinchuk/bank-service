@@ -17,8 +17,8 @@ public class CurrencyConverter {
     }
 
     public BigDecimal getRate(Currency from, Currency to, LocalDate date) {
-        String path = urlRequest + "?from=" + from.toString()
-                + "&to=" + to.toString() + "&date=" + date;
+        String path = String.format("%s?from=%s&to=%s&date=%s",
+                urlRequest, from.toString(), to.toString(), date);
         return new BigDecimal(httpClient.getResponse(path));
     }
 }

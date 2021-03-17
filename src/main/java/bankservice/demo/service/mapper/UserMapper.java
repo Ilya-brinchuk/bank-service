@@ -26,6 +26,7 @@ public class UserMapper implements MapperToEntity<User, UserRequestDto>,
         responseDto.setName(user.getName());
         responseDto.setBirthday(user.getDateOfBirth());
         responseDto.setPhoneNumber(user.getPhoneNumber());
+        responseDto.setId(user.getId());
         return responseDto;
     }
 }
