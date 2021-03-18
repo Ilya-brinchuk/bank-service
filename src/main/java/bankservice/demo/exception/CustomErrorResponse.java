@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class CustomErrorResponse {
-
     private String errorCode;
     private String errorMsg;
     private int status;
