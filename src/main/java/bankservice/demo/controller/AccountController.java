@@ -82,6 +82,8 @@ public class AccountController {
                 .stream()
                 .map(transactionMapperToDto::mapToDto)
                 .collect(Collectors.toList());
+
+
     }
 
     @PatchMapping("/{accountNumber}")
